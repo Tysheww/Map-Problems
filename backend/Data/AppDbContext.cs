@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<Issue> Issues { get; set; }
     public DbSet<Comment> Comments { get; set; }
 
+    public DbSet<User> Users { get; set; }
     // --- НОВИЙ БЛОК НАЛАШТУВАНЬ ---
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

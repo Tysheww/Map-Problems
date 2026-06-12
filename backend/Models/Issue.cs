@@ -20,4 +20,7 @@ public class Issue
     public List<Comment> Comments { get; set; } = new();
 
     public bool IsDeleted { get; set; } = false;
+
+    // === НОВЕ ПОЛЕ ДЛЯ ЗБЕРЕЖЕННЯ ФОТОГРАФІЇ ===
+    public string? PhotoUrl { get; set; } 
 }

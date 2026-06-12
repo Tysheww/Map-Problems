@@ -1,5 +1,3 @@
-
-
 :root {
     --zt-blue: #0A3663;
     --zt-blue-hover: #072545;
@@ -24,181 +22,103 @@ body {
     color: var(--zt-text);
 }
 
-.welcome-overlay {
-    position: relative;
-    min-height: 100vh;
-    padding: 34px 18px;
-    display: flex;
-    justify-content: center;
-}
-
-.city-shell {
-    width: 100%;
-    max-width: 1120px;
-    margin: 0 auto;
-}
-
-.city-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 24px;
-    margin-bottom: 24px;
-}
-
+/* ================================ */
+/* 1. ГОЛОВНА СТОРІНКА (HomePage)   */
+/* ================================ */
+.welcome-overlay { position: relative; min-height: 100vh; padding: 34px 18px; display: flex; justify-content: center; }
+.city-shell { width: 100%; max-width: 1120px; margin: 0 auto; }
+.city-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 24px; }
 .city-brand { display: flex; align-items: center; gap: 18px; }
 .logo-wrapper { flex: 0 0 auto; }
 .dash-logo { width: 64px; margin: 0; }
-
-.city-kicker, .section-eyebrow {
-    display: inline-block;
-    color: #2F5597;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-}
-
-.dash-titles h1 {
-    font-size: 26px;
-    line-height: 1.1;
-    color: #0B3768;
-    margin: 0 0 6px 0;
-}
-
-.dash-titles p {
-    color: #5F6F85;
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    margin: 0;
-}
-
+.city-kicker, .section-eyebrow { display: inline-block; color: #2F5597; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.dash-titles h1 { font-size: 26px; line-height: 1.1; color: #0B3768; margin: 0 0 6px 0; }
+.dash-titles p { color: #5F6F85; font-size: 13px; letter-spacing: 0.06em; margin: 0; }
 .dash-top-right { display: flex; gap: 10px; }
-
-.btn-profile {
-    background: #FFFFFF;
-    border: 1px solid #D6DEE8;
-    color: #0B3768;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-}
+.btn-profile { background: #FFFFFF; border: 1px solid #D6DEE8; color: #0B3768; border-radius: 10px; padding: 10px 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
 .btn-profile:hover { background: #F8FAFC; }
-
-.dashboard-card {
-    background: var(--zt-surface);
-    border: 1px solid #DDE5EF;
-    border-radius: 16px;
-    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-    overflow: hidden;
-}
-
-.hero-panel {
-    background: linear-gradient(135deg, #FFFFFF 0%, #F2F6FB 100%);
-    border-bottom: 1px solid #DDE5EF;
-    padding: 34px 40px;
-    display: grid;
-    grid-template-columns: 1.4fr 0.9fr;
-    gap: 32px;
-    align-items: center;
-}
-
-.hero-panel h2 {
-    margin: 0 0 12px 0;
-    color: #1F2937;
-    font-size: 28px;
-    line-height: 1.25;
-}
-
-.hero-panel p {
-    margin: 0;
-    color: #4B5563;
-    line-height: 1.55;
-    font-size: 15px;
-}
-
+.dashboard-card { background: var(--zt-surface); border: 1px solid #DDE5EF; border-radius: 16px; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08); overflow: hidden; }
+.hero-panel { background: linear-gradient(135deg, #FFFFFF 0%, #F2F6FB 100%); border-bottom: 1px solid #DDE5EF; padding: 34px 40px; display: grid; grid-template-columns: 1.4fr 0.9fr; gap: 32px; align-items: center; }
+.hero-panel h2 { margin: 0 0 12px 0; color: #1F2937; font-size: 28px; line-height: 1.25; }
+.hero-panel p { margin: 0; color: #4B5563; line-height: 1.55; font-size: 15px; }
 .hero-actions { display: flex; flex-direction: column; gap: 12px; }
-
-.btn-1551 {
-    border-radius: 12px;
-    padding: 15px 18px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    text-align: center;
-    transition: 0.2s;
-}
-
+.btn-1551 { border-radius: 12px; padding: 15px 18px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; text-align: center; transition: 0.2s; }
 .primary-1551 { background: #0B3768; color: #FFFFFF; }
 .primary-1551:hover { background: #08294F; }
-
 .secondary-1551 { background: #FFFFFF; color: #0B3768; border: 1px solid #B8C7DA; }
 .secondary-1551:hover { background: #F6F8FB; }
-
 .dash-grid { padding: 32px 40px 38px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-
-.service-widget h3, .news-widget h3, .info-board h3 {
-    border-bottom: 1px solid var(--zt-gold);
-    color: #0B3768;
-    padding-bottom: 10px;
-    margin-top: 0;
-}
-
+.service-widget h3, .news-widget h3, .info-board h3 { border-bottom: 1px solid var(--zt-gold); color: #0B3768; padding-bottom: 10px; margin-top: 0; }
 .progress-info { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
 .status-done { color: var(--zt-success); }
 .status-total { color: var(--zt-text-light); }
-
 .progress-bg { height: 8px; border-radius: 999px; background: #E4EAF2; margin-bottom: 20px;}
 .progress-fill { height: 100%; border-radius: 999px; background: #0B3768; transition: width 0.5s; }
-
 .chart-container { height: 210px; display: flex; align-items: center; justify-content: center; gap: 20px;}
-
-.info-board {
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 14px;
-    padding: 22px;
-    margin-bottom: 26px;
-}
-
+.info-board { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 22px; margin-bottom: 26px; }
 .category-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.category-grid span {
-    padding: 8px 10px;
-    border-radius: 999px;
-    background: #F1F5F9;
-    color: #334155;
-    font-size: 12px;
-    font-weight: 700;
-}
-
+.category-grid span { padding: 8px 10px; border-radius: 999px; background: #F1F5F9; color: #334155; font-size: 12px; font-weight: 700; }
 .news-list { list-style: none; padding: 0; margin: 0; }
-.news-list li {
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-left: 4px solid var(--zt-gold);
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    font-size: 13px;
-}
-
-.news-date {
-    display: block;
-    color: var(--zt-gold);
-    font-weight: 700;
-    font-size: 11px;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-}
-
+.news-list li { background: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid var(--zt-gold); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 13px; }
+.news-date { display: block; color: var(--zt-gold); font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 4px; }
 .small-action { width: 100%; margin-top: 15px; }
 
+/* ================================ */
+/* 2. РЕЄСТР ПРОБЛЕМ (RegistryPage) */
+/* ================================ */
+.page-view { min-height: 100vh; background: var(--zt-bg); padding: 30px; }
+.list-shell { width: 100%; max-width: 1120px; margin: 0 auto; }
+.municipal-list-header { background: #FFFFFF; border: 1px solid #DDE5EF; border-radius: 16px; padding: 22px; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.municipal-list-header h2 { font-size: 24px; color: #0B3768; margin: 0 0 5px 0; }
+.list-subtitle { margin: 0; color: #64748B; font-size: 14px; }
+.list-controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 15px; }
+.sort-dropdown { padding: 10px 15px; border-radius: 10px; border: 1px solid #CBD5E1; background: #FFFFFF; font-family: 'Montserrat', sans-serif; font-size: 13px; color: #4A5568; outline: none; }
+.search-field { width: 250px; }
+.back-btn { padding: 10px 20px; border-radius: 10px; border: 1px solid #CBD5E1; background: #FFFFFF; font-weight: 700; cursor: pointer; transition: 0.2s; color: #0B3768; }
+.back-btn:hover { background: #0B3768; color: white; border-color: #0B3768; }
+
+.stat-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.stat-card { background: white; padding: 20px; border: 1px solid #DDE5EF; border-radius: 16px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04); display: flex; flex-direction: column; }
+.stat-label { font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 10px; }
+.stat-value { font-size: 32px; font-weight: 800; color: #0B3768; line-height: 1; }
+.stat-card.urgent .stat-value { color: #C53030; }
+.stat-card.success .stat-value { color: #2F855A; }
+
+#issues-list { list-style: none; padding: 0; margin: 0; }
+.issue-item { background: white; padding: 25px; margin-bottom: 20px; border-radius: 16px; border: 1px solid #DDE5EF; box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06); }
+.issue-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+.issue-item strong { display: block; font-size: 16px; color: #0B3768; margin-bottom: 8px; text-transform: uppercase; font-weight: 800; }
+.issue-status-row { display: flex; align-items: center; gap: 10px; }
+.watch-count { font-size: 11px; color: #64748B; font-weight: 700; }
+.btn-map-show { background: transparent; border: 1px solid #CBD5E1; color: #4A5568; border-radius: 8px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
+.btn-map-show:hover { background: #0B3768; color: white; border-color: #0B3768; }
+.issue-desc { margin: 0 0 15px 0; color: #334155; font-size: 14px; line-height: 1.6; }
+.issue-meta { display: flex; justify-content: space-between; font-size: 11px; color: #A0AEC0; font-weight: 700; border-top: 1px solid #E2E8F0; padding-top: 15px; margin-top: 15px; text-transform: uppercase; }
+
+.badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; }
+.badge.process { background: #FEFCBF; color: #975A16; border-color: #F6E05E; }
+.badge.done { background: #F0FFF4; color: #22543D; border-color: #9AE6B4; }
+.badge.new { background: #FFF5F5; color: #9B2C2C; border-color: #FEB2B2; }
+.empty-message { text-align: center; color: #64748B; padding: 30px; font-weight: 600; }
+
+/* ================================ */
+/* 3. КАРТА ПРОБЛЕМ (MapPage)       */
+/* ================================ */
+.map-toolbar { position: absolute; z-index: 1000; top: 20px; right: 20px; }
+.floating-back-btn { padding: 12px 20px; background: white; border-radius: 12px; cursor: pointer; border: 1px solid #0B3768; font-weight: 700; font-size: 12px; color: #0B3768; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; }
+.floating-back-btn:hover { background: #0B3768; color: white; }
+
+/* ================================ */
+/* 4. МОБІЛЬНА АДАПТАЦІЯ            */
+/* ================================ */
 @media (max-width: 768px) {
     .dash-grid { grid-template-columns: 1fr; padding: 20px; }
     .hero-panel { grid-template-columns: 1fr; padding: 20px; }
     .city-header { flex-direction: column; }
+    .municipal-list-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .list-controls { flex-direction: column; align-items: stretch; width: 100%; }
+    .search-field { width: 100%; }
+    .issue-top { flex-direction: column; gap: 15px; }
+    .btn-map-show { width: 100%; }
+    .issue-meta { flex-direction: column; gap: 8px; }
 }

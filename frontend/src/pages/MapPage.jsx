@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import LoginModal from './LoginModal'; // Підключаємо модалку авторизації
 import './MapPage.css';
 
 // Фікс іконок Leaflet для Vite
@@ -21,7 +22,10 @@ L.Marker.prototype.options.icon = DefaultIcon;
 // --- КОМПОНЕНТ ДЛЯ МАРКЕРА (Лайки та Коментарі) ---
 function IssueMarker({ issue, onUpdate }) {
   const [commentText, setCommentText] = useState('');
-  const [authorName, setAuthorName] = useState('Денис'); 
+  
+  // Беремо ім'я автора коментаря з поточного авторизованого користувача
+  const savedUser = JSON.parse(localStorage.getItem('user'));
+  const authorName = savedUser ? savedUser.email.split('@')[0] : 'Анонім'; 
 
   const handleUpvote = () => {
     axios.put(`http://localhost:5023/api/Issues/${issue.id}/upvote`)
@@ -44,13 +48,22 @@ function IssueMarker({ issue, onUpdate }) {
     <Marker position={[issue.latitude, issue.longitude]}>
       <Popup minWidth={250}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <h3 style={{ margin: 0, color: '#d32f2f' }}>{issue.title}</h3>
+          <h3 style={{ margin: 0, color: '#0A3663' }}>{issue.title}</h3>
           <p style={{ margin: 0 }}><strong>Категорія:</strong> {issue.category}</p>
           <p style={{ margin: 0 }}>{issue.description}</p>
           
+          {/* Показуємо фото, якщо воно є */}
+          {issue.photoUrl && (
+            <img 
+               src={issue.photoUrl} 
+               alt="Фото проблеми" 
+               style={{ width: '100%', maxHeight: '150px', objectFit: 'cover', borderRadius: '4px', marginTop: '5px' }} 
+            />
+          )}
+
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', paddingBottom: '10px', borderBottom: '1px solid #eee' }}>
             <span style={{ fontWeight: 'bold' }}>Голосів: {issue.upvotes}</span>
-            <button onClick={handleUpvote} style={{ cursor: 'pointer', padding: '5px 10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px' }}>
+            <button onClick={handleUpvote} style={{ cursor: 'pointer', padding: '5px 10px', backgroundColor: '#2F855A', color: 'white', border: 'none', borderRadius: '4px' }}>
               👍 Підтримати
             </button>
           </div>
@@ -61,7 +74,7 @@ function IssueMarker({ issue, onUpdate }) {
               <p style={{ margin: 0, fontSize: '12px', color: '#666' }}>Ще немає коментарів.</p>
             ) : (
               issue.comments.map(c => (
-                <div key={c.id} style={{ backgroundColor: '#f8f9fa', padding: '5px', borderRadius: '4px', marginBottom: '5px', fontSize: '12px' }}>
+                <div key={c.id} style={{ backgroundColor: '#F8FAFC', padding: '5px', borderRadius: '4px', marginBottom: '5px', fontSize: '12px' }}>
                   <strong>{c.authorName}:</strong> {c.text}
                 </div>
               ))
@@ -69,8 +82,8 @@ function IssueMarker({ issue, onUpdate }) {
           </div>
 
           <div style={{ display: 'flex', gap: '5px', marginTop: '5px' }}>
-            <input type="text" placeholder="Коментар..." value={commentText} onChange={(e) => setCommentText(e.target.value)} style={{ flex: 1, padding: '4px' }} />
-            <button onClick={handleCommentSubmit} style={{ cursor: 'pointer', padding: '4px 8px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>➤</button>
+            <input type="text" placeholder="Коментар..." value={commentText} onChange={(e) => setCommentText(e.target.value)} style={{ flex: 1, padding: '4px', border: '1px solid #CBD5E1', borderRadius: '4px' }} />
+            <button onClick={handleCommentSubmit} style={{ cursor: 'pointer', padding: '4px 8px', backgroundColor: '#0A3663', color: 'white', border: 'none', borderRadius: '4px' }}>➤</button>
           </div>
         </div>
       </Popup>
@@ -80,15 +93,28 @@ function IssueMarker({ issue, onUpdate }) {
 
 // --- ГОЛОВНИЙ КОМПОНЕНТ СТОРІНКИ КАРТИ ---
 function MapPage() {
-  const navigate = useNavigate(); // Для кнопки "Назад"
+  const navigate = useNavigate(); 
   const [issues, setIssues] = useState([]);
   const [draftPosition, setDraftPosition] = useState(null);
+  
+  // Стан для створення нової проблеми
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newCategory, setNewCategory] = useState('Дороги / Ями');
-  const [photoFile, setPhotoFile] = useState(null); // Стан для зберігання вибраного файлу
+  const [photoFile, setPhotoFile] = useState(null); 
+
+  // --- НОВІ СТАНИ ДЛЯ АВТОРИЗАЦІЇ ---
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   useEffect(() => {
+    // Перевіряємо, чи користувач авторизований
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+        setCurrentUser(JSON.parse(savedUser));
+    }
+
+    // Завантажуємо маркери
     axios.get('http://localhost:5023/api/Issues')
       .then(response => setIssues(response.data))
       .catch(error => console.error("Помилка:", error));
@@ -96,7 +122,16 @@ function MapPage() {
 
   const MapClickHandler = () => {
     useMapEvents({
-      click(e) { setDraftPosition([e.latlng.lat, e.latlng.lng]); },
+      click(e) { 
+        // ГОЛОВНА ПЕРЕВІРКА: Якщо не авторизований, відкриваємо модалку!
+        if (!currentUser) {
+            setIsAuthOpen(true);
+            return; // Зупиняємо виконання, маркер не ставиться
+        }
+        
+        // Якщо авторизований — ставимо маркер-чернетку
+        setDraftPosition([e.latlng.lat, e.latlng.lng]); 
+      },
     });
     return null;
   };
@@ -105,27 +140,28 @@ function MapPage() {
     if (!newTitle || !newDescription) return alert("Заповніть усі поля!");
 
     const formData = new FormData();
-    
-    // ВАЖЛИВО: Ключі тепер з великої літери, щоб C# їх впізнав!
     formData.append('Title', newTitle);
     formData.append('Description', newDescription);
     formData.append('Category', newCategory);
     formData.append('Latitude', draftPosition[0].toString().replace(',', '.'));
     formData.append('Longitude', draftPosition[1].toString().replace(',', '.'));
     
-    // Файл передаємо з маленької літери 'photo'
+    // === НОВИЙ РЯДОК: ПЕРЕДАЄМО ПОШТУ ===
+    if (currentUser && currentUser.email) {
+        formData.append('AuthorEmail', currentUser.email);
+    }
+    
     if (photoFile) {
       formData.append('photo', photoFile); 
     }
 
-    // ВАЖЛИВО: Ми прибрали ручний хедер Content-Type. Axios зробить це сам!
     axios.post('http://localhost:5023/api/Issues', formData)
     .then(response => {
       setIssues([...issues, response.data]);
       setDraftPosition(null); 
       setNewTitle(''); 
       setNewDescription('');
-      setPhotoFile(null); // Очищаємо файл
+      setPhotoFile(null);
       alert("Звернення успішно створено!");
     })
     .catch(error => {
@@ -133,7 +169,6 @@ function MapPage() {
         alert("Помилка відправки! Перевір консоль (F12).");
     });
   };
-
   const handleUpdateIssue = (updatedIssue) => {
     setIssues(issues.map(iss => iss.id === updatedIssue.id ? updatedIssue : iss));
   };
@@ -143,23 +178,18 @@ function MapPage() {
   return (
     <div style={{ position: 'relative', height: '100vh', width: '100vw' }}>
       
-      {/* ПЛАВАЮЧА КНОПКА ПОВЕРНЕННЯ */}
       <div className="map-toolbar">
-        <button 
-          className="floating-back-btn" 
-          onClick={() => navigate('/')}
-          style={{ display: 'block' }} // Примусово показуємо кнопку
-        >
+        <button className="floating-back-btn" onClick={() => navigate('/')} style={{ display: 'block' }}>
           Повернутися в меню
         </button>
       </div>
 
-      {/* КАРТА З ЖОРСТКОЮ ВИСОТОЮ 100vh */}
       <MapContainer center={cityCenter} zoom={13} style={{ height: '100vh', width: '100vw' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        
         <MapClickHandler />
 
         {issues.map(issue => (
@@ -191,11 +221,21 @@ function MapPage() {
                 style={{ marginTop: '3px', width: '100%' }}
               />
               
-              <button onClick={handleSubmit} style={{ cursor: 'pointer', padding: '8px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}>Відправити</button>
+              <button onClick={handleSubmit} style={{ cursor: 'pointer', padding: '8px', backgroundColor: '#0A3663', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}>Відправити</button>
             </div>
           </Popup>
         )}
       </MapContainer>
+
+      {/* ВІКНО АВТОРИЗАЦІЇ */}
+      <LoginModal 
+          isOpen={isAuthOpen} 
+          onClose={() => setIsAuthOpen(false)} 
+          onLoginSuccess={(user) => {
+              setCurrentUser(user);
+              setIsAuthOpen(false);
+          }} 
+      />
     </div>
   );
 }

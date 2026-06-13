@@ -2,7 +2,7 @@ using MapOfProblems.API.Data;
 using MapOfProblems.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization; // Додали для правильного читання крапок/ком у координатах
+using System.Globalization;
 
 namespace MapOfProblems.API.Controllers;
 
@@ -21,7 +21,6 @@ public class IssuesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Issue>>> GetIssues()
     {
-        // Повертаємо тільки ті, що НЕ видалені
         return await _context.Issues
             .Include(i => i.Comments)
             .Where(i => i.IsDeleted == false) 
@@ -36,38 +35,32 @@ public class IssuesController : ControllerBase
         [FromForm] string Category, 
         [FromForm] string Latitude, 
         [FromForm] string Longitude, 
+        [FromForm] string? AuthorEmail, // <--- ДОДАЛИ ПОЛЕ ДЛЯ ПОШТИ
         IFormFile? photo)
     {
         string photoUrl = "";
 
-        // Якщо користувач прикріпив фото, зберігаємо його локально
         if (photo != null && photo.Length > 0)
         {
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
             
-            // Створюємо папку, якщо її немає
             if (!Directory.Exists(uploadsFolder)) 
                 Directory.CreateDirectory(uploadsFolder);
 
-            // Генеруємо унікальне ім'я файлу
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-            // Зберігаємо файл на диск
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
                 await photo.CopyToAsync(fileStream);
             }
 
-            // Формуємо посилання на файл
             photoUrl = $"http://localhost:5023/uploads/{uniqueFileName}";
         }
 
-        // Надійно парсимо координати (завжди беремо крапку як розділювач, незалежно від мови Windows)
         double lat = double.Parse(Latitude.Replace(',', '.'), CultureInfo.InvariantCulture);
         double lng = double.Parse(Longitude.Replace(',', '.'), CultureInfo.InvariantCulture);
 
-        // Вручну створюємо об'єкт проблеми
         var issue = new Issue
         {
             Title = Title,
@@ -75,6 +68,7 @@ public class IssuesController : ControllerBase
             Category = Category,
             Latitude = lat,
             Longitude = lng,
+            AuthorEmail = AuthorEmail, // <--- ЗБЕРІГАЄМО ПОШТУ В БАЗУ
             Status = "Очікує розгляду",
             PhotoUrl = photoUrl,
             CreatedAt = DateTime.UtcNow,

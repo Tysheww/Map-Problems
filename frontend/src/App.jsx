@@ -12,6 +12,7 @@ function App() {
         <Route path="/map" element={<MapPage />} />
         {/* 2. Додаємо шлях для реєстру */}
         <Route path="/registry" element={<RegistryPage />} /> 
+        <Route path="/cabinet" element={<RegistryPage />} />
       </Routes>
     </Router>
   );

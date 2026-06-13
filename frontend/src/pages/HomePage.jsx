@@ -79,7 +79,7 @@ function HomePage() {
                 <header className="city-header">
                     <div className="city-brand">
                         <div className="logo-wrapper">
-                            <img src="/Image.png" alt="Логотип Житомира" className="dash-logo" />     
+                            <img src="/Image.png" alt="Логотип Житомира" className="dash-logo" />    
                              </div>
 
                         <div className="dash-titles">
@@ -94,7 +94,8 @@ function HomePage() {
                             <button className="btn-profile" onClick={() => setIsAuthOpen(true)}>Авторизація</button>
                         ) : (
                             <>
-                                <button className="btn-profile" onClick={() => navigate('/registry')}>Особистий кабінет</button>
+                                {/* ВИПРАВЛЕНО: Тепер кнопка веде на /cabinet */}
+                                <button className="btn-profile" onClick={() => navigate('/cabinet')}>Особистий кабінет</button>
                                 <button className="btn-profile logout-btn" onClick={() => setIsLogoutModalOpen(true)}>Вийти</button>
                             </>
                         )}
